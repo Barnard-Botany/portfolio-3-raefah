@@ -1,0 +1,258 @@
+---
+title: "3.1: Phylogency Exercises"
+output: html_notebook
+---
+
+By Raefah Wahid
+
+Necessary packages:
+
+```{r}
+install.packages(ape)
+install.packages("devtools")
+devtools::install_github("ropensci/brranching")
+library("ape")
+library("brranching")
+```
+
+### MINI EXERCISE 1: Understanding Newick and Phylo Objects
+
+```{r}
+newick_str = "(((Humans, Chimps), Gorillas), Orangs);"
+tr_primates = read.tree(text=newick_str)
+plot(tr_primates)
+```
+
+Notes about the following commmands:
+
+tr_primates : gives the tip labels
+
+str("tr_primates") : prints the entered string, which is the name of the tree
+
+str(tr_primates) : tr_primates is a tree object so by printing out the object, we receive information about it. specifically, we are told the number of edges and nodes, the tips, and the class and order
+
+attributes(tr_primates) : we are given the attributes of the tree object, which are the names (edges, node numbers, and tip labels), the class ("phylo"), and the order ("cladewise").
+
+names(tr_primates) : we are given the parts of the name attribute of the tree object (edges, node numbers, and tip labels)
+
+To finish up Mini-Exercise 1, write new code with a new Newick string variable, read the string using read.tree, and plot it. The goal is to generate a four-taxon tree with a new topology. It will be an erroneous tree, depicting relationships that contradict today's biological knowledge. That's okay; this is just an exercise.
+
+```{r}
+new_tuple = "(Orange, ((Apple, Banana), Strawberry));"
+fruits = read.tree(text=new_tuple)
+plot(fruits)
+```
+
+## MINI-EXERCISE 2
+
+1. Copy, paste and re-write a chunk of code (or write it fresh): write a new Newick tree as as string variable, read it as a tree, and plot it. Make sure it is consistent with 2018 botanical knowledge about these four taxa. You may need to modify topology.
+
+```{r}
+plant_tuple = "(((Tarragon, Chamomile), Sunflower), Endive);"
+plant_tree = read.tree(text=plant_tuple)
+plot(plant_tree)
+```
+
+2. To these four taxa, add two additional taxa: radish and sequoia. For these six tip taxa, write a new Newick variable, read it, and plot it. Then repeat. Aim to write two alternative trees: one erroneous and one correct. 
+
+Correct tree:
+```{r}
+correct = "((((Tarragon, Chamomile), Sunflower), Endive), (Radish), (Sequoia));"
+correct_tree = read.tree(text=correct)
+plot(correct_tree)
+```
+
+Erroneous tree:
+```{r}
+erroneous = "(((Tarragon, Chamomile, Radish), Sunflower, Sequoia), Endive);"
+erroneous_tree = read.tree(text=erroneous)
+plot(erroneous_tree)
+```
+
+
+a. Explain what's wrong in your erroneous tree and how you've corrected the error in the other tree.
+
+The erroneous tree places radish in such a way that it has a common ancestor with chamomile and tarragon, which it does not. It also places sequoia in a similar subtree. In the correct tree, radish and sequoia are separate from the other related plants.
+
+b. Use commands such as "str" or "attribute" and comment about whether your erroneous and correct tree differ in tips, Nnodes, or edges. 
+
+```{r}
+str(correct_tree)
+attributes(correct_tree)
+str(erroneous_tree)
+attributes(erroneous_tree)
+```
+
+Their attributes are the same, but the tip order and number of nodes differ.
+
+## MINI-EXERCISE 3
+
+In November 2017, scientists discovered that there are two Orang species, the known species Pongo abelii and the new species Pongo tapanuliensis. The two taxa are estimated to have separated about 3.5 million years ago. How would you modify the Newick portion of code above to show that there are two species? 
+
+```{r}
+newick_str = "(((Humans, Chimps), Gorillas), (Pongo_tapanuliensis), (Pongo_abelii));"
+tr_primates = read.tree(text=newick_str)
+plot(tr_primates)
+```
+
+### MINI EXERCISE 4
+
+Practice a few of these data display techniques using the six-taxon phylogeny that includes cabbage, kale, corn and wheat, plus radish and sequoia.
+
+```{r}
+plants_two = "(Sequoia, (Wheat,(Corn,(Cabbage, Kale, Radish))));"
+plants_two_tree = read.tree(text=plants_two)
+
+plot(plants_two_tree, type="cladogram")
+plot(plants_two_tree, type="fan")
+plot(plants_two_tree, type="unrooted")
+plot(plants_two_tree, type="radial")
+```
+
+
+#### MINI-EXERCISE 5
+
+Do and write up notes about two things:
+
+1. Try generating these trees again, but change from cladogram to phylogram, or to another format for the tree. 
+
+```{r}
+# storing data
+EG<-c("Abies",
+"Ailanthus",
+"Aspicllum",
+"Atragene",
+"Bangia",
+"Begonia",
+"Berberis",
+"Betula",
+"Blasia",
+"Blechnum",
+"Caulerpa",
+"Ceratophyllum",
+"Chenopodium",
+"Clematis",
+"Cocculus",
+"Corallorrhiza",
+"Corchorus",
+"Cucurbita",
+"Dahlia",
+"Dioscorea",
+"Dracaena",
+"Equisetum",
+"Euonymus",
+"Euphorbia",
+"Fagus",
+"Ficus",
+"Fontinalis",
+"Fossombronia",
+"Fritillaria",
+"Fucus",
+"Gleditschia",
+"Gleocapsa",
+"Haplomitrium",
+"Hedera",
+"Helianthus",
+"Heterocentron",
+"Hippuris",
+"Hypoderma",
+"Isoetes",
+"Linum",
+"Liquidambar",
+"Marchantia",
+"Momordica",
+"Monopodium",
+"Mucor",
+"Nerium",
+"Nitella",
+"Osmunda",
+"Pandanus",
+"Papaver",
+"Pelargonium",
+"Phlomis",
+"Phytolacca",
+"Pinus",
+"Platanus",
+"Polytrichum",
+"Populus",
+"Potamogeton",
+"Punctum",
+"Quercus",
+"Ricinus",
+"Rubus",
+"Salix",
+"Sambucus",
+"Sclerotium",
+"Selaginella",
+"Sempervivum",
+"Sponia",
+"Stypocaulon",
+"Sympodium",
+"Taxodium",
+"Tecoma",
+"Tradescantia",
+"Urtica",
+"Viola",
+"Vitis",
+"Wisteria",
+"Yucca")
+
+EG_tree <- phylomatic(taxa = EG, get = 'POST')
+write.tree(EG_tree, file="eg_tree_stuff")
+# cladogram version
+plot(EG_tree, no.margin = TRUE, type="cladogram")
+# phylogram version
+plot(EG_tree, no.margin = TRUE, type="phylogram")
+```
+
+
+2. Then, looking at all your output, what differs most noticably between the pair of trees, and how/why does this relate to the stored tree used to generate them? Try to explain what this means in your own words. 
+
+While the phylogenetic trees and cladograms help to show the relationships between different plants, only the phylogenetic tree actually shows the evolutionary time and amount of change between species. This is represented through the phylogenetic tree's branch length. This is obvious in the trees we printed, because the cladogram's branches are obviously longer and more specific.
+
+3. Lastly, look at the output and you'll see that many taxa were excluded. Try looking them up in EOL or Wikipedia. Why was it difficult to include them? What does this say about the history of botany? Are there some things that were excluded that should not have been excluded?  
+
+The list is not clean. There are some plants that either do not exist (when I tried to search for them, like Aspicllum) or are just the incorrect name for a plant and doesn't belong in the list. This means that the function used to create the tree probably didn't know what to do with these out-of-date or erroneous plant names and didn't include them. A lot of the plants are also bryophytes, so they're nonvascular and aren't included in the same category as the other plant species and that's why R excluded them.
+
+
+#### FINAL EXERCISE
+
+For the final exercise, I took the list of species from the Welikia database and the list of plants I used in a day from Portfolio 2. Let's read in those csv files and get the species names so we can form our trees:
+
+```{r}
+welikia_list = read.csv("welikia.csv")
+used_list = read.csv("plants_i_use.csv")
+welikia_species = paste(welikia_list$Scientific.Name)
+used_species = paste(used_list$Scientific.Name)
+
+welikia_species
+used_species
+```
+
+Now let's format the trees as phylogenies using the phylomatic() method and plot the trees.
+
+```{r}
+welikia <- phylomatic(taxa = welikia_species, get = 'POST')
+plot(welikia, no.margin = TRUE, type="phylogram")
+used <- phylomatic(taxa = used_species, get = 'POST')
+plot(used, no.margin = TRUE, type="phylogram")
+```
+
+Now let's saved our plotted trees as PDF files so we can view them better!
+
+```{r}
+welikia_fn = "welikia_tree.pdf"
+pdf(file=welikia_fn)
+plot(welikia, no.margin = TRUE, type="phylogram")
+dev.off()
+cmdstr = paste("open ", welikia_fn, sep="")
+system(cmdstr)
+
+used_fn = "plants_i_use_tree.pdf"
+pdf(file=used_fn)
+plot(used, no.margin = TRUE, type="phylogram")
+dev.off()
+cmdstr = paste("open ", used_fn, sep="")
+system(cmdstr)
+```
+
